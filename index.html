@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Para Ti, Mi Amor! ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS GENERALES Y FONDO --- */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #fce0e6 0%, #f7c3cf 100%); /* Fondo degradado suave */
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            overflow: hidden; /* Oculta barras de scroll si el body se desborda, no la tarjeta */
+        }
+
+        /* --- ESTILO DE LA CARTA (CERRADA) --- */
+        .card-container {
+            position: relative;
+            width: 90%;
+            max-width: 350px;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.8s ease;
+            margin: 20px 0;
+            animation: fadeInScale 1s ease-out forwards; /* Animación de entrada para la tarjeta */
+        }
+
+        .card-closed {
+            background-color: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: opacity 0.5s, transform 0.8s;
+            position: relative;
+            z-index: 2;
+            border: 5px solid #ff99aa;
+            background: linear-gradient(135deg, #ffffff 0%, #ffe8ee 100%);
+        }
+
+        .heart-icon {
+            font-size: 5rem;
+            color: #ff3366;
+            margin-bottom: 10px;
+            animation: pulse 1.5s infinite ease-in-out; /* Animación de pulso mejorada */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .closed-text h2 {
+            font-size: 1.8rem;
+            color: #ff3366;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .closed-text p {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* --- ESTILO DE LA CARTA (ABIERTA) --- */
+        .card-open {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, #ffcccc 0%, #ff99aa 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px) rotateX(-90deg);
+            transition: opacity 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Curva de rebote */
+            z-index: 1;
+            
+            min-height: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            /* Ocultar barra de scroll */
+            &::-webkit-scrollbar { display: none; }
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Títulos de la carta abierta */
+        .open-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            animation: slideInFromTop 0.8s ease-out forwards; /* Animación de entrada */
+            opacity: 0; /* Empieza invisible */
+        }
+        
+        /* Mensaje de la carta abierta */
+        .open-message p { /* Aplicamos animación a cada párrafo */
+            font-size: 1rem; 
+            line-height: 1.6;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 10px 0; /* Ajustado el margen entre párrafos */
+            animation: fadeInSlideUp 0.7s ease-out forwards; /* Animación de entrada */
+            opacity: 0; /* Empieza invisible */
+        }
+        /* Retrasos para los párrafos del mensaje */
+        .open-message p:nth-child(1) { animation-delay: 0.8s; }
+        .open-message p:nth-child(2) { animation-delay: 1.1s; }
+        .open-message p:nth-child(3) { animation-delay: 1.4s; }
+
+
+        /* Firma de la carta abierta */
+        .open-signature {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff3366;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 20px;
+            animation: fadeInScale 0.8s ease-out forwards; /* Animación de entrada */
+            opacity: 0; /* Empieza invisible */
+            animation-delay: 1.7s; /* Retraso para que aparezca al final */
+        }
+        
+        /* --- CLASES DE APERTURA CON JAVASCRIPT --- */
+        .card-container.open .card-closed {
+            opacity: 0;
+            transform: translateY(-20px) rotateX(90deg);
+        }
+
+        .card-container.open .card-open {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
+        }
+
+        /* Cuando la tarjeta se abre, activamos las animaciones del contenido interno */
+        .card-container.open .open-title,
+        .card-container.open .open-message p,
+        .card-container.open .open-signature {
+            opacity: 1;
+        }
+
+        /* --- ESTRELLAS Y DECORACIÓN (OPCIONAL) --- */
+        .star-decoration {
+            position: absolute;
+            font-size: 2rem;
+            color: #ffcc00;
+            opacity: 0; /* Empiezan invisibles */
+            animation: starTwinkle 3s ease-in-out infinite alternate; /* Animación de titileo mejorada */
+        }
+        .star-top-right { top: -10px; right: -10px; transform: rotate(15deg); animation-delay: 0.5s; }
+        .star-bottom-left { bottom: -10px; left: -10px; transform: rotate(-15deg); animation-delay: 1.2s; }
+        
+        /* Animación para las estrellas (aparecen con un brillo) */
+        @keyframes starTwinkle {
+            0% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+            20% { opacity: 0.8; transform: scale(1.1) rotate(10deg); }
+            40% { opacity: 0.6; transform: scale(0.9) rotate(-5deg); }
+            60% { opacity: 1; transform: scale(1.2) rotate(15deg); }
+            80% { opacity: 0.7; transform: scale(1) rotate(-10deg); }
+            100% { opacity: 0.9; transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* --- NUEVAS ANIMACIONES DE ENTRADA --- */
+
+        /* Animación general para escalar y aparecer */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Animación para deslizar desde arriba */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animación para aparecer y deslizarse ligeramente hacia arriba */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- ANIMACIÓN DE CONFETI (AÑADIDA CON JAVASCRIPT) --- */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffcc00; /* Color inicial */
+            border-radius: 50%;
+            pointer-events: none; /* Ignorar clicks */
+            animation: fallAndFade 2s forwards ease-out;
+            z-index: 100;
+        }
+
+        @keyframes fallAndFade {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) rotate(var(--rot)) scale(0);
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="card-container" onclick="openCard()">
+        
+        <div class="card-closed">
+            <div class="star-decoration star-top-right">✨</div>
+            <div class="star-decoration star-bottom-left">⭐</div>
+            
+            <div class="heart-icon">💖</div>
+
+            <div class="closed-text">
+                <h2>Para Ti ❤️</h2>
+                <p>Toca para abrir tu mensaje especial</p>
+            </div>
+        </div>
+
+        <div class="card-open">
+            <h1 class="open-title">¡Feliz Cumpleaños Mi Amor! 🎉</h1>
+
+            <div class="open-message">
+                <p>En este día tan especial, quiero que sepas que eres la persona más importante en mi vida.</p>
+                <p>Cada momento a tu lado es un regalo, y tu sonrisa ilumina mis días de una manera que nunca imaginé posible.</p>
+                <p>Gracias por ser quien eres, por tu amor, tu paciencia y por hacerme tan feliz.</p>
+            </div>
+
+            <p class="open-signature">Te amo con todo mi corazón ❤️</p>
+        </div>
+
+    </div>
+
+    <script>
+        function openCard() {
+            const card = document.querySelector('.card-container');
+            // Agrega la clase 'open' al contenedor para activar las transiciones CSS
+            card.classList.add('open');
+            // Opcional: Deshabilita el click después de abrir
+            card.onclick = null; // Para que no se active de nuevo
+
+            // Activa la animación del confeti
+            createConfetti(100); // Genera 100 trozos de confeti
+        }
+
+        // Función para generar confeti
+        function createConfetti(count) {
+            const colors = ['#ffcc00', '#ff6699', '#99ccff', '#ccff66']; // Colores de confeti
+            const body = document.body;
+
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Posición inicial (arriba de la carta)
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * -50; // Un poco por encima del viewport
+                confetti.style.left = `${startX}px`;
+                confetti.style.top = `${startY}px`;
+
+                // Propiedades para la animación (caída, dispersión, rotación)
+                const endX = startX + (Math.random() - 0.5) * 400; // Dispersión horizontal
+                const endY = window.innerHeight + Math.random() * 200; // Caída más allá del viewport
+                const rotation = Math.random() * 720; // Rotación aleatoria
+
+                confetti.style.setProperty('--x', `${endX - startX}px`);
+                confetti.style.setProperty('--y', `${endY - startY}px`);
+                confetti.style.setProperty('--rot', `${rotation}deg`);
+
+                // Tamaño aleatorio
+                const size = Math.random() * 8 + 5; // Entre 5 y 13px
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+
+                body.appendChild(confetti);
+
+                // Eliminar el confeti después de su animación para no sobrecargar el DOM
+                confetti.addEventListener('animationend', () => {
+                    confetti.remove();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
