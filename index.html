@@ -13,6 +13,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            /* Degradado de fondo */
             background: linear-gradient(135deg, #fce0e6 0%, #f7c3cf 100%);
             font-family: 'Poppins', sans-serif;
             color: #333;
@@ -71,12 +72,13 @@
             color: #888;
         }
 
-        /* --- CARTA ABIERTA --- */
+        /* --- CARTA ABIERTA (Alineada al tope) --- */
         .card-open {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
+            /* Degradado interno de la carta */
             background: linear-gradient(to top, #ffcccc 0%, #ff99aa 100%);
             color: white;
             padding: 50px 25px;
@@ -84,6 +86,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
             opacity: 0;
+            /* Efecto de apertura */
             transform: translateY(20px) rotateX(-90deg);
             transition: opacity 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             z-index: 1;
@@ -92,13 +95,13 @@
             max-height: 90vh;
             overflow-y: auto;
             
-            /* AJUSTE CLAVE AQUÍ: Alineamos todos los elementos al centro y dejamos que el espacio los separe */
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Alineación al centro vertical */
-            align-items: center; /* Alineación al centro horizontal (aunque el ancho es 100%) */
+            /* CLAVE: Alinea el contenido a la parte superior */
+            justify-content: flex-start;
+            align-items: center;
 
-            /* Ocultar barra de scroll */
+            /* Ocultar barra de scroll (invisible) */
             &::-webkit-scrollbar { display: none; }
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -112,12 +115,13 @@
             margin-bottom: 25px;
             animation: slideInFromTop 0.8s ease-out forwards;
             opacity: 0;
+            margin-top: 0; 
         }
-
-        /* AJUSTE CLAVE: Damos al contenedor del mensaje un margen automático para centrarlo verticalmente */
+        
         .open-message {
-            margin: auto 0; 
-            padding: 10px 0; /* Pequeño padding para asegurar el espacio de los bordes */
+            margin: 0; 
+            padding: 10px 0;
+            width: 100%;
         }
         
         .open-message p {
@@ -130,7 +134,7 @@
             opacity: 0;
         }
 
-        /* Retrasos para los párrafos */
+        /* Retrasos de animación para cada párrafo */
         .open-message p:nth-child(1) { animation-delay: 0.8s; }
         .open-message p:nth-child(2) { animation-delay: 1.1s; }
         .open-message p:nth-child(3) { animation-delay: 1.4s; }
@@ -196,7 +200,7 @@
             }
         }
 
-        /* --- ANIMACIONES (Sin cambios) --- */
+        /* --- ANIMACIONES --- */
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         @keyframes slideInFromTop { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -216,6 +220,7 @@
         .star-top-right { top: 0px; right: 0px; transform: rotate(15deg); animation-delay: 0.5s; }
         .star-bottom-left { bottom: 0px; left: 0px; transform: rotate(-15deg); animation-delay: 1.2s; }
 
+        /* Confeti */
         .confetti {
             position: absolute;
             width: 10px;
@@ -266,9 +271,11 @@
     <script>
         function openCard() {
             const card = document.querySelector('.card-container');
+            // Activa la clase de apertura y deshabilita clics futuros
             card.classList.add('open');
             card.onclick = null;
 
+            // Genera el confeti
             createConfetti(100);
         }
 
@@ -281,6 +288,7 @@
                 confetti.classList.add('confetti');
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 
+                // Posición y dispersión
                 const startX = Math.random() * window.innerWidth;
                 const startY = Math.random() * -50;
                 confetti.style.left = `${startX}px`;
@@ -294,6 +302,7 @@
                 confetti.style.setProperty('--y', `${endY - startY}px`);
                 confetti.style.setProperty('--rot', `${rotation}deg`);
 
+                // Tamaño
                 const size = Math.random() * 8 + 5;
                 confetti.style.width = `${size}px`;
                 confetti.style.height = `${size}px`;
