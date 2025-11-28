@@ -17,14 +17,14 @@
             font-family: 'Poppins', sans-serif;
             color: #333;
             overflow-x: hidden;
-            padding: 20px 0; /* Espacio extra para móvil si la carta es muy grande */
+            padding: 20px 0;
         }
 
         /* --- CARTA CERRADA --- */
         .card-container {
             position: relative;
             width: 90%;
-            max-width: 400px; /* Aumentamos el ancho máximo para que se vea bien en PC */
+            max-width: 400px; 
             perspective: 1000px;
             cursor: pointer;
             transition: transform 0.8s ease;
@@ -34,7 +34,7 @@
 
         .card-closed {
             background-color: white;
-            padding: 40px 25px; /* Aumentado el padding */
+            padding: 40px 25px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             text-align: center;
@@ -46,7 +46,7 @@
         }
 
         .heart-icon {
-            font-size: 6rem; /* Corazón más grande */
+            font-size: 6rem;
             color: #ff3366;
             margin-bottom: 15px;
             animation: pulse 1.5s infinite ease-in-out;
@@ -89,12 +89,14 @@
             z-index: 1;
             
             min-height: 60vh;
-            max-height: 90vh; /* Permite que la tarjeta ocupe hasta el 90% del alto de la pantalla */
+            max-height: 90vh;
             overflow-y: auto;
             
+            /* AJUSTE CLAVE AQUÍ: Alineamos todos los elementos al centro y dejamos que el espacio los separe */
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center; /* Alineación al centro vertical */
+            align-items: center; /* Alineación al centro horizontal (aunque el ancho es 100%) */
 
             /* Ocultar barra de scroll */
             &::-webkit-scrollbar { display: none; }
@@ -111,9 +113,15 @@
             animation: slideInFromTop 0.8s ease-out forwards;
             opacity: 0;
         }
+
+        /* AJUSTE CLAVE: Damos al contenedor del mensaje un margen automático para centrarlo verticalmente */
+        .open-message {
+            margin: auto 0; 
+            padding: 10px 0; /* Pequeño padding para asegurar el espacio de los bordes */
+        }
         
         .open-message p {
-            font-size: 1rem; /* Mantenemos 1rem para PC y lo ajustamos en móvil */
+            font-size: 1rem;
             line-height: 1.6;
             color: white;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
@@ -132,11 +140,11 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: #ff3366;
-            background-color: rgba(255, 255, 255, 0.95); /* Más sólido */
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 12px 20px;
             border-radius: 20px;
             display: inline-block;
-            margin-top: 35px; /* Más espacio */
+            margin-top: 35px;
             animation: fadeInScale 0.8s ease-out forwards;
             opacity: 0;
             animation-delay: 1.7s;
@@ -172,13 +180,13 @@
                 font-size: 1.8rem;
             }
             .card-open {
-                padding: 40px 20px; /* Menos padding en pantallas pequeñas */
+                padding: 40px 20px;
             }
             .open-title {
-                font-size: 1.9rem; /* Título más compacto */
+                font-size: 1.9rem;
             }
             .open-message p {
-                font-size: 0.9rem; /* Texto del mensaje más pequeño */
+                font-size: 0.9rem;
                 margin: 10px 0;
             }
             .open-signature {
@@ -188,19 +196,10 @@
             }
         }
 
-        /* --- ANIMACIONES --- */
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes slideInFromTop {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* --- ANIMACIONES (Sin cambios) --- */
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideInFromTop { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes starTwinkle {
             0% { opacity: 0; transform: scale(0.8) rotate(0deg); }
             20% { opacity: 0.8; transform: scale(1.1) rotate(10deg); }
@@ -267,11 +266,9 @@
     <script>
         function openCard() {
             const card = document.querySelector('.card-container');
-            // Agrega la clase 'open' al contenedor para activar las transiciones CSS
             card.classList.add('open');
-            card.onclick = null; // Deshabilita el click después de abrir
+            card.onclick = null;
 
-            // Activa la animación del confeti
             createConfetti(100);
         }
 
@@ -284,13 +281,11 @@
                 confetti.classList.add('confetti');
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 
-                // Posición inicial (arriba de la carta)
                 const startX = Math.random() * window.innerWidth;
                 const startY = Math.random() * -50;
                 confetti.style.left = `${startX}px`;
                 confetti.style.top = `${startY}px`;
 
-                // Propiedades para la animación (caída, dispersión, rotación)
                 const endX = startX + (Math.random() - 0.5) * 600; 
                 const endY = window.innerHeight + Math.random() * 200; 
                 const rotation = Math.random() * 720; 
@@ -299,7 +294,6 @@
                 confetti.style.setProperty('--y', `${endY - startY}px`);
                 confetti.style.setProperty('--rot', `${rotation}deg`);
 
-                // Tamaño aleatorio
                 const size = Math.random() * 8 + 5;
                 confetti.style.width = `${size}px`;
                 confetti.style.height = `${size}px`;
