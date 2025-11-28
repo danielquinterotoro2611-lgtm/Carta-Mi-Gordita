@@ -13,27 +13,28 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #fce0e6 0%, #f7c3cf 100%); /* Fondo degradado suave */
+            background: linear-gradient(135deg, #fce0e6 0%, #f7c3cf 100%);
             font-family: 'Poppins', sans-serif;
             color: #333;
-            overflow: hidden; /* Oculta barras de scroll si el body se desborda, no la tarjeta */
+            overflow-x: hidden;
+            padding: 20px 0; /* Espacio extra para móvil si la carta es muy grande */
         }
 
-        /* --- ESTILO DE LA CARTA (CERRADA) --- */
+        /* --- CARTA CERRADA --- */
         .card-container {
             position: relative;
             width: 90%;
-            max-width: 350px;
+            max-width: 400px; /* Aumentamos el ancho máximo para que se vea bien en PC */
             perspective: 1000px;
             cursor: pointer;
             transition: transform 0.8s ease;
             margin: 20px 0;
-            animation: fadeInScale 1s ease-out forwards; /* Animación de entrada para la tarjeta */
+            animation: fadeInScale 1s ease-out forwards;
         }
 
         .card-closed {
             background-color: white;
-            padding: 30px 20px;
+            padding: 40px 25px; /* Aumentado el padding */
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             text-align: center;
@@ -45,10 +46,10 @@
         }
 
         .heart-icon {
-            font-size: 5rem;
+            font-size: 6rem; /* Corazón más grande */
             color: #ff3366;
-            margin-bottom: 10px;
-            animation: pulse 1.5s infinite ease-in-out; /* Animación de pulso mejorada */
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite ease-in-out;
         }
 
         @keyframes pulse {
@@ -58,7 +59,7 @@
         }
 
         .closed-text h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #ff3366;
             margin: 0;
             font-weight: 700;
@@ -66,11 +67,11 @@
 
         .closed-text p {
             margin-top: 5px;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #888;
         }
 
-        /* --- ESTILO DE LA CARTA (ABIERTA) --- */
+        /* --- CARTA ABIERTA --- */
         .card-open {
             position: absolute;
             top: 0;
@@ -78,22 +79,22 @@
             width: 100%;
             background: linear-gradient(to top, #ffcccc 0%, #ff99aa 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 50px 25px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
             opacity: 0;
             transform: translateY(20px) rotateX(-90deg);
-            transition: opacity 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Curva de rebote */
+            transition: opacity 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             z-index: 1;
             
-            min-height: 500px;
-            max-height: 80vh;
+            min-height: 60vh;
+            max-height: 90vh; /* Permite que la tarjeta ocupe hasta el 90% del alto de la pantalla */
             overflow-y: auto;
             
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
+            justify-content: space-between;
 
             /* Ocultar barra de scroll */
             &::-webkit-scrollbar { display: none; }
@@ -101,49 +102,48 @@
             scrollbar-width: none;
         }
         
-        /* Títulos de la carta abierta */
         .open-title {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            animation: slideInFromTop 0.8s ease-out forwards; /* Animación de entrada */
-            opacity: 0; /* Empieza invisible */
+            margin-bottom: 25px;
+            animation: slideInFromTop 0.8s ease-out forwards;
+            opacity: 0;
         }
         
-        /* Mensaje de la carta abierta */
-        .open-message p { /* Aplicamos animación a cada párrafo */
-            font-size: 1rem; 
+        .open-message p {
+            font-size: 1rem; /* Mantenemos 1rem para PC y lo ajustamos en móvil */
             line-height: 1.6;
             color: white;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            margin: 10px 0; /* Ajustado el margen entre párrafos */
-            animation: fadeInSlideUp 0.7s ease-out forwards; /* Animación de entrada */
-            opacity: 0; /* Empieza invisible */
+            margin: 15px 0;
+            animation: fadeInSlideUp 0.7s ease-out forwards;
+            opacity: 0;
         }
-        /* Retrasos para los párrafos del mensaje */
+
+        /* Retrasos para los párrafos */
         .open-message p:nth-child(1) { animation-delay: 0.8s; }
         .open-message p:nth-child(2) { animation-delay: 1.1s; }
         .open-message p:nth-child(3) { animation-delay: 1.4s; }
 
 
-        /* Firma de la carta abierta */
         .open-signature {
             font-size: 1.5rem;
             font-weight: 700;
             color: #ff3366;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.95); /* Más sólido */
+            padding: 12px 20px;
+            border-radius: 20px;
             display: inline-block;
-            margin-top: 20px;
-            animation: fadeInScale 0.8s ease-out forwards; /* Animación de entrada */
-            opacity: 0; /* Empieza invisible */
-            animation-delay: 1.7s; /* Retraso para que aparezca al final */
+            margin-top: 35px; /* Más espacio */
+            animation: fadeInScale 0.8s ease-out forwards;
+            opacity: 0;
+            animation-delay: 1.7s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
-        /* --- CLASES DE APERTURA CON JAVASCRIPT --- */
+        /* --- CLASES DE APERTURA --- */
         .card-container.open .card-closed {
             opacity: 0;
             transform: translateY(-20px) rotateX(90deg);
@@ -154,93 +154,82 @@
             transform: translateY(0) rotateX(0deg);
         }
 
-        /* Cuando la tarjeta se abre, activamos las animaciones del contenido interno */
         .card-container.open .open-title,
         .card-container.open .open-message p,
         .card-container.open .open-signature {
             opacity: 1;
         }
 
-        /* --- ESTRELLAS Y DECORACIÓN (OPCIONAL) --- */
+        /* --- MEDIA QUERIES PARA MÓVILES --- */
+        @media (max-width: 500px) {
+            .card-container {
+                max-width: 90%;
+            }
+            .heart-icon {
+                font-size: 5rem;
+            }
+            .closed-text h2 {
+                font-size: 1.8rem;
+            }
+            .card-open {
+                padding: 40px 20px; /* Menos padding en pantallas pequeñas */
+            }
+            .open-title {
+                font-size: 1.9rem; /* Título más compacto */
+            }
+            .open-message p {
+                font-size: 0.9rem; /* Texto del mensaje más pequeño */
+                margin: 10px 0;
+            }
+            .open-signature {
+                font-size: 1.2rem;
+                margin-top: 25px;
+                padding: 10px 15px;
+            }
+        }
+
+        /* --- ANIMACIONES --- */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideInFromTop {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes starTwinkle {
+            0% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+            20% { opacity: 0.8; transform: scale(1.1) rotate(10deg); }
+            60% { opacity: 1; transform: scale(1.2) rotate(15deg); }
+            100% { opacity: 0.9; transform: scale(1.1) rotate(5deg); }
+        }
         .star-decoration {
             position: absolute;
             font-size: 2rem;
             color: #ffcc00;
-            opacity: 0; /* Empiezan invisibles */
-            animation: starTwinkle 3s ease-in-out infinite alternate; /* Animación de titileo mejorada */
+            opacity: 0;
+            animation: starTwinkle 3s ease-in-out infinite alternate;
         }
-        .star-top-right { top: -10px; right: -10px; transform: rotate(15deg); animation-delay: 0.5s; }
-        .star-bottom-left { bottom: -10px; left: -10px; transform: rotate(-15deg); animation-delay: 1.2s; }
-        
-        /* Animación para las estrellas (aparecen con un brillo) */
-        @keyframes starTwinkle {
-            0% { opacity: 0; transform: scale(0.8) rotate(0deg); }
-            20% { opacity: 0.8; transform: scale(1.1) rotate(10deg); }
-            40% { opacity: 0.6; transform: scale(0.9) rotate(-5deg); }
-            60% { opacity: 1; transform: scale(1.2) rotate(15deg); }
-            80% { opacity: 0.7; transform: scale(1) rotate(-10deg); }
-            100% { opacity: 0.9; transform: scale(1.1) rotate(5deg); }
-        }
+        .star-top-right { top: 0px; right: 0px; transform: rotate(15deg); animation-delay: 0.5s; }
+        .star-bottom-left { bottom: 0px; left: 0px; transform: rotate(-15deg); animation-delay: 1.2s; }
 
-        /* --- NUEVAS ANIMACIONES DE ENTRADA --- */
-
-        /* Animación general para escalar y aparecer */
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Animación para deslizar desde arriba */
-        @keyframes slideInFromTop {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Animación para aparecer y deslizarse ligeramente hacia arriba */
-        @keyframes fadeInSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* --- ANIMACIÓN DE CONFETI (AÑADIDA CON JAVASCRIPT) --- */
         .confetti {
             position: absolute;
             width: 10px;
             height: 10px;
-            background-color: #ffcc00; /* Color inicial */
+            background-color: #ffcc00;
             border-radius: 50%;
-            pointer-events: none; /* Ignorar clicks */
+            pointer-events: none;
             animation: fallAndFade 2s forwards ease-out;
             z-index: 100;
         }
-
         @keyframes fallAndFade {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--x), var(--y)) rotate(var(--rot)) scale(0);
-                opacity: 0;
-            }
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) rotate(var(--rot)) scale(0); opacity: 0; }
         }
 
     </style>
@@ -280,16 +269,14 @@
             const card = document.querySelector('.card-container');
             // Agrega la clase 'open' al contenedor para activar las transiciones CSS
             card.classList.add('open');
-            // Opcional: Deshabilita el click después de abrir
-            card.onclick = null; // Para que no se active de nuevo
+            card.onclick = null; // Deshabilita el click después de abrir
 
             // Activa la animación del confeti
-            createConfetti(100); // Genera 100 trozos de confeti
+            createConfetti(100);
         }
 
-        // Función para generar confeti
         function createConfetti(count) {
-            const colors = ['#ffcc00', '#ff6699', '#99ccff', '#ccff66']; // Colores de confeti
+            const colors = ['#ffcc00', '#ff6699', '#99ccff', '#ccff66'];
             const body = document.body;
 
             for (let i = 0; i < count; i++) {
@@ -299,27 +286,26 @@
                 
                 // Posición inicial (arriba de la carta)
                 const startX = Math.random() * window.innerWidth;
-                const startY = Math.random() * -50; // Un poco por encima del viewport
+                const startY = Math.random() * -50;
                 confetti.style.left = `${startX}px`;
                 confetti.style.top = `${startY}px`;
 
                 // Propiedades para la animación (caída, dispersión, rotación)
-                const endX = startX + (Math.random() - 0.5) * 400; // Dispersión horizontal
-                const endY = window.innerHeight + Math.random() * 200; // Caída más allá del viewport
-                const rotation = Math.random() * 720; // Rotación aleatoria
+                const endX = startX + (Math.random() - 0.5) * 600; 
+                const endY = window.innerHeight + Math.random() * 200; 
+                const rotation = Math.random() * 720; 
 
                 confetti.style.setProperty('--x', `${endX - startX}px`);
                 confetti.style.setProperty('--y', `${endY - startY}px`);
                 confetti.style.setProperty('--rot', `${rotation}deg`);
 
                 // Tamaño aleatorio
-                const size = Math.random() * 8 + 5; // Entre 5 y 13px
+                const size = Math.random() * 8 + 5;
                 confetti.style.width = `${size}px`;
                 confetti.style.height = `${size}px`;
 
                 body.appendChild(confetti);
 
-                // Eliminar el confeti después de su animación para no sobrecargar el DOM
                 confetti.addEventListener('animationend', () => {
                     confetti.remove();
                 });
